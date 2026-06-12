@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bittencourt & Barbosa — Cartão Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --midnight: #252f38; --brass: #C9A84C; --white: #ffffff; --bg: #f4f4f2; --border: #e2ddd6; }
+  body { font-family: 'DM Sans', Arial, sans-serif; background: var(--bg); color: var(--midnight); min-height: 100vh; }
+  header { background: var(--midnight); padding: 1rem 2rem; display: flex; align-items: center; gap: 16px; }
+  header img { height: 32px; display: block; }
+  header span { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--brass); padding-left: 16px; border-left: 1px solid rgba(201,168,76,0.3); letter-spacing: 0.04em; }
+  .container { max-width: 980px; margin: 2.5rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: start; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+  .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass); margin-bottom: 1.25rem; }
+  label { display: block; font-size: 12px; color: #777; margin-bottom: 4px; font-weight: 500; }
+  select { width: 100%; padding: 8px 12px; font-family: 'DM Sans', Arial, sans-serif; font-size: 14px; border: 1px solid var(--border); border-radius: 7px; outline: none; color: var(--midnight); background: #fff; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; transition: border-color 0.15s; }
+  select:focus { border-color: var(--brass); }
+  .download-btn { margin-top: 1.25rem; width: 100%; background: var(--midnight); color: var(--white); border: none; border-radius: 7px; padding: 11px 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: 0.04em; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+  .download-btn:hover { background: #1a2229; }
+  .note { margin-top: 1rem; background: #faf8f3; border: 1px solid #ede8d8; border-radius: 8px; padding: 0.875rem 1rem; font-size: 12px; color: #6b5e3a; line-height: 1.7; }
+  .preview-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brass); margin-bottom: 0.75rem; }
+  .card-wrapper { display: flex; justify-content: center; }
+  .digital-card { width: 340px; aspect-ratio: 9/16; background: var(--midnight); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 8px 40px rgba(37,47,56,0.25); }
+  .card-pattern { width: 100%; height: 90px; background: var(--brass); position: relative; overflow: hidden; flex-shrink: 0; }
+  .card-pattern-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url("https://static.wixstatic.com/media/5ba30a_c145221357d3476fa45378a67bb30848~mv2.png"); background-size: 52px; background-repeat: repeat; opacity: 0.2; }
+  .card-logo { margin-top: -36px; width: 96px; height: 96px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; border: 3px solid var(--brass); flex-shrink: 0; overflow: hidden; z-index: 1; }
+  .card-logo img { width: 80px; height: 80px; object-fit: contain; }
+  .card-name { margin-top: 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 700; color: var(--white); text-align: center; padding: 0 24px; line-height: 1.3; }
+  .card-title-text { margin-top: 4px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--brass); text-align: center; letter-spacing: 0.04em; }
+  .card-divider { width: 40px; height: 1px; background: rgba(201,168,76,0.4); margin: 16px auto; flex-shrink: 0; }
+  .card-buttons { width: 100%; padding: 0 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card-btn { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 11px 14px; text-decoration: none; transition: background 0.15s; cursor: pointer; }
+  .card-btn:hover { background: rgba(201,168,76,0.1); }
+  .card-btn-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-btn-icon svg { width: 18px; height: 18px; }
+  .card-btn-icon.whatsapp { background: #25D366; }
+  .card-btn-icon.phone { background: rgba(255,255,255,0.12); }
+  .card-btn-icon.maps { background: #f6f2ec; }
+  .card-btn-icon.website { background: rgba(255,255,255,0.12); }
+  .card-btn-icon.save { background: var(--brass); }
+  .card-btn-text { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--white); font-weight: 500; }
+  .card-btn-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+  .card-footer { padding: 14px 24px 20px; font-family: 'DM Sans', sans-serif; font-size: 10px; color: rgba(255,255,255,0.25); text-align: center; letter-spacing: 0.04em; flex-shrink: 0; }
+  @media (max-width: 720px) { .container { grid-template-columns: 1fr; } .digital-card { width: 300px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://static.wixstatic.com/media/5ba30a_94d3f32c504b41208e06e73443a4b035~mv2.png" alt="Bittencourt & Barbosa">
+  <span>Cartão Digital</span>
+</header>
+
+<div class="container">
+  <div>
+    <div class="card">
+      <div class="card-title">Selecionar pessoa</div>
+      <label>Nome</label>
+      <select id="person" onchange="updateCard()">
+        <option value="">— selecione —</option>
+        <option value="0">Ana Carolina Almeida de Castro</option>
+        <option value="1">Alessandra Ramos Espinelli</option>
+        <option value="2">Thalita de Mattos Gomes</option>
+        <option value="3">Deborah da Silva Faria Borges Barbosa</option>
+        <option value="4">Sandro Marques Cavalcante Silva</option>
+        <option value="5">Heitor Tadros Barroso Aguiar</option>
+        <option value="6">Paulo Cesar Victer Ferreira</option>
+        <option value="7">Leonardo Thire do Amaral</option>
+        <option value="8">Paula Guimarães Woyames</option>
+        <option value="9">Luis Eduardo Guimarães Borges Barbosa</option>
+        <option value="10">Marcelo Ribeiro Mendes</option>
+        <option value="11">Mário Henrique Guimarães Bittencourt</option>
+        <option value="12">Jaqueline de Oliveira Conceição</option>
+      </select>
+      <a class="download-btn" id="downloadBtn" href="#" onclick="return false;" style="opacity:0.4;pointer-events:none;">
+        ↓ Baixar cartão (HTML)
+      </a>
+    </div>
+    <div class="note">O cartão é gerado como arquivo HTML — pode ser salvo e aberto no celular como página web. Cada botão é clicável e abre o app correspondente.</div>
+  </div>
+
+  <div>
+    <div class="preview-label">Pré-visualização</div>
+    <div class="card-wrapper">
+      <div class="digital-card" id="digitalCard">
+        <div class="card-pattern"><div class="card-pattern-inner"></div></div>
+        <div class="card-logo">
+          <img src="https://static.wixstatic.com/media/5ba30a_7a82315c69934ef0b6e66e17768c8551~mv2.png" alt="B&B">
+        </div>
+        <div class="card-name" id="cardName">Selecione uma pessoa</div>
+        <div class="card-title-text" id="cardTitle">—</div>
+        <div class="card-divider"></div>
+        <div class="card-buttons" id="cardButtons"></div>
+        <div class="card-footer">BITTENCOURT & BARBOSA · ADVOGADOS & ASSOCIADOS</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PEOPLE = [
+  { name: "Ana Carolina Almeida de Castro",       title: "Advogada Trabalhista",  phone: "21975670831",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_6c873ed0aecb4dfcbc3472958d733893.vcf" },
+  { name: "Alessandra Ramos Espinelli",            title: "Advogada Trabalhista",  phone: "21992743539",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_1d39a389a7f449a2819c236301742260.vcf" },
+  { name: "Thalita de Mattos Gomes",               title: "Advogada Cível",        phone: "21994893095",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_7a3ad5b466304420a6074a005b6bfe90.vcf" },
+  { name: "Deborah da Silva Faria Borges Barbosa", title: "Advogada Cível",        phone: "27999838833",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_e2974ad41df94b35a50b7b07814f1a9a.vcf" },
+  { name: "Sandro Marques Cavalcante Silva",       title: "Advogado Desportivo",   phone: "21996196046",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_9d7c39ae65a84c76a59b5a574929bdf2.vcf" },
+  { name: "Heitor Tadros Barroso Aguiar",          title: "Advogado Desportivo",   phone: "21999227701",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_cee57768f9fe494687454da306260c98.vcf" },
+  { name: "Paulo Cesar Victer Ferreira",           title: "Assessor Desportivo",   phone: "21983033717",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_5a29ec545ffa46b18f98b36d4180d68d.vcf" },
+  { name: "Leonardo Thire do Amaral",              title: "Advogado Tributário",   phone: "21987317199",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_1fed6598c7794f5d87eca0c7806b17af.vcf" },
+  { name: "Paula Guimarães Woyames",               title: "Contadora",             phone: "21992326075",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_1438d2c976b8412fb08ff01cd42eabe9.vcf" },
+  { name: "Luis Eduardo Guimarães Borges Barbosa", title: "Sócio",                 phone: "21984870839",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_5e9a6c9a5f994784bdf308b9e4340422.vcf" },
+  { name: "Marcelo Ribeiro Mendes",                title: "Sócio",                 phone: "21971433195",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_6ed31b4c48c449ebbad4d26c2f239535.vcf" },
+  { name: "Mário Henrique Guimarães Bittencourt",  title: "Sócio",                 phone: "21998077633",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_b10cf6ac95b243738ef345369fcd1a9e.vcf" },
+  { name: "Jaqueline de Oliveira Conceição",       title: "Secretária",            phone: "21992548436",  vcf: "https://5ba30aa5-bc21-4d31-9fb3-3262023eedf9.usrfiles.com/ugd/5ba30a_4e8231baa53f4581b494d0030de012f5.vcf" },
+];
+
+const MAPS_URL = "https://maps.google.com/?q=Av.+Rio+Branco+251+Grupo+1608+Centro+Rio+de+Janeiro+RJ";
+const WEBSITE  = "https://bittencourtbarbosa.com.br/";
+
+// SVG flat icons
+const SVG = {
+  whatsapp: `<svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.197a.75.75 0 00.906.919l5.516-1.445A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 01-4.964-1.361l-.356-.211-3.677.964.982-3.587-.232-.369A9.718 9.718 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>`,
+  phone: `<svg viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>`,
+  maps: `<svg viewBox="0 0 24 24" fill="#252f38"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+  website: `<svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>`,
+  save: `<svg viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`,
+};
+
+function fmtPhone(p) {
+  return p.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '($1) $2 $3-$4');
+}
+
+function buildButtons(p) {
+  return `
+    <a class="card-btn" href="https://wa.me/55${p.phone}">
+      <div class="card-btn-icon whatsapp">${SVG.whatsapp}</div>
+      <div><div class="card-btn-text">WhatsApp</div><div class="card-btn-sub">+55 ${fmtPhone(p.phone)}</div></div>
+    </a>
+    <a class="card-btn" href="tel:+55${p.phone}">
+      <div class="card-btn-icon phone">${SVG.phone}</div>
+      <div><div class="card-btn-text">Telefone</div><div class="card-btn-sub">+55 ${fmtPhone(p.phone)}</div></div>
+    </a>
+    <a class="card-btn" href="${MAPS_URL}" target="_blank">
+      <div class="card-btn-icon maps">${SVG.maps}</div>
+      <div><div class="card-btn-text">Como chegar</div><div class="card-btn-sub">Av. Rio Branco, 251 — Centro, RJ</div></div>
+    </a>
+    <a class="card-btn" href="${WEBSITE}" target="_blank">
+      <div class="card-btn-icon website">${SVG.website}</div>
+      <div><div class="card-btn-text">Website</div><div class="card-btn-sub">bittencourtbarbosa.com.br</div></div>
+    </a>
+    <a class="card-btn" href="${p.vcf}" download>
+      <div class="card-btn-icon save">${SVG.save}</div>
+      <div><div class="card-btn-text">Salvar contato</div><div class="card-btn-sub">Adicionar à agenda</div></div>
+    </a>
+  `;
+}
+
+function buildStandaloneHTML(p) {
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>${p.name} — Bittencourt & Barbosa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',Arial,sans-serif;background:#1a2229;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .card{width:100%;max-width:380px;background:#252f38;border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.4);}
+  .top{height:100px;background:#C9A84C;position:relative;overflow:hidden;}
+  .top-inner{position:absolute;top:0;left:0;right:0;bottom:0;background-image:url("https://static.wixstatic.com/media/5ba30a_c145221357d3476fa45378a67bb30848~mv2.png");background-size:52px;background-repeat:repeat;opacity:0.2;}
+  .logo-wrap{width:96px;height:96px;border-radius:50%;background:#fff;border:3px solid #C9A84C;margin:-48px auto 0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;overflow:hidden;}
+  .logo-wrap img{width:80px;height:80px;object-fit:contain;}
+  .info{text-align:center;padding:14px 24px 0;}
+  .name{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1.3;}
+  .role{font-size:12px;color:#C9A84C;letter-spacing:0.04em;margin-top:4px;}
+  .divider{width:40px;height:1px;background:rgba(201,168,76,0.3);margin:16px auto;}
+  .btns{padding:0 20px 24px;display:flex;flex-direction:column;gap:10px;}
+  .btn{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:12px 14px;text-decoration:none;}
+  .icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .icon svg{width:18px;height:18px;}
+  .wa{background:#25D366;} .ph{background:rgba(255,255,255,0.12);} .map{background:#f6f2ec;} .web{background:rgba(255,255,255,0.12);} .save{background:#C9A84C;}
+  .btn-label{font-size:13px;color:#fff;font-weight:500;}
+  .btn-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;}
+  .footer{padding:12px 24px 18px;font-size:10px;color:rgba(255,255,255,0.2);text-align:center;letter-spacing:0.05em;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top"><div class="top-inner"></div></div>
+  <div class="logo-wrap"><img src="https://static.wixstatic.com/media/5ba30a_7a82315c69934ef0b6e66e17768c8551~mv2.png" alt="B&B"></div>
+  <div class="info">
+    <div class="name">${p.name}</div>
+    <div class="role">${p.title}</div>
+  </div>
+  <div class="divider"></div>
+  <div class="btns">
+    <a class="btn" href="https://wa.me/55${p.phone}"><div class="icon wa"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.197a.75.75 0 00.906.919l5.516-1.445A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 01-4.964-1.361l-.356-.211-3.677.964.982-3.587-.232-.369A9.718 9.718 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg></div><div><div class="btn-label">WhatsApp</div><div class="btn-sub">+55 ${fmtPhone(p.phone)}</div></div></a>
+    <a class="btn" href="tel:+55${p.phone}"><div class="icon ph"><svg viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div><div class="btn-label">Telefone</div><div class="btn-sub">+55 ${fmtPhone(p.phone)}</div></div></a>
+    <a class="btn" href="${MAPS_URL}" target="_blank"><div class="icon map"><svg viewBox="0 0 24 24" fill="#252f38"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div><div><div class="btn-label">Como chegar</div><div class="btn-sub">Av. Rio Branco, 251 — Centro, RJ</div></div></a>
+    <a class="btn" href="${WEBSITE}" target="_blank"><div class="icon web"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div><div><div class="btn-label">Website</div><div class="btn-sub">bittencourtbarbosa.com.br</div></div></a>
+    <a class="btn" href="${p.vcf}" download><div class="icon save"><svg viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><div><div class="btn-label">Salvar contato</div><div class="btn-sub">Adicionar à agenda</div></div></a>
+  </div>
+  <div class="footer">BITTENCOURT & BARBOSA · ADVOGADOS & ASSOCIADOS</div>
+</div>
+</body>
+</html>`;
+}
+
+function fmtPhone(p) { return p.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '($1) $2 $3-$4'); }
+
+function updateCard() {
+  const idx = document.getElementById('person').value;
+  if (idx === '') {
+    document.getElementById('cardName').textContent = 'Selecione uma pessoa';
+    document.getElementById('cardTitle').textContent = '—';
+    document.getElementById('cardButtons').innerHTML = '';
+    const btn = document.getElementById('downloadBtn');
+    btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; btn.onclick = () => false;
+    return;
+  }
+  const p = PEOPLE[parseInt(idx)];
+  document.getElementById('cardName').textContent = p.name;
+  document.getElementById('cardTitle').textContent = p.title;
+  document.getElementById('cardButtons').innerHTML = buildButtons(p);
+  const html = buildStandaloneHTML(p);
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const btn = document.getElementById('downloadBtn');
+  btn.href = url;
+  btn.download = `cartao-${p.name.split(' ')[0].toLowerCase()}-bb.html`;
+  btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; btn.onclick = null;
+}
+</script>
+</body>
+</html>

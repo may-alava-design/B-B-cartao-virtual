@@ -167,9 +167,10 @@ function buildStandaloneHTML(name, role, phone) {
 <title>${name} — Bittencourt & Barbosa</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{color-scheme:light only;}
-  body{font-family:'DM Sans',Arial,sans-serif;background:#1a2229;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-filter:none!important;filter:none!important;}
+  html{color-scheme:light;background:#1a2229!important;}
+  body{font-family:'DM Sans',Arial,sans-serif;background:#1a2229!important;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  @media (prefers-color-scheme: dark) { html, body { background:#1a2229!important; } .card{background:#252f38!important;} .top{background:#C9A84C!important;} .logo-wrap{background:#fff!important;border-color:#C9A84C!important;} .btn{background:rgba(255,255,255,0.06)!important;border-color:rgba(201,168,76,0.2)!important;} .wa{background:#25D366!important;} .ph{background:rgba(255,255,255,0.12)!important;} .map{background:#f6f2ec!important;} .web{background:rgba(255,255,255,0.12)!important;} .save{background:#C9A84C!important;} }
   .card{width:100%;max-width:380px;background:#252f38;border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.4);}
   .top{height:105px;position:relative;overflow:hidden;}
   .logo-wrap{width:96px;height:96px;border-radius:50%;background:#fff;border:3px solid #C9A84C;margin:-48px auto 0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;overflow:hidden;}
